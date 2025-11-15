@@ -66,8 +66,8 @@ public class CategoryController {
      * @return 新增结果
      */
     @PostMapping
-    public Result<String> add(@RequestBody CategoryDTO categoryDTO) {
-        categoryService.add(categoryDTO);
+    public Result<String> insert(@RequestBody CategoryDTO categoryDTO) {
+        categoryService.insert(categoryDTO);
         return Result.success();
     }
 

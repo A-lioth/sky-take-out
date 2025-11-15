@@ -36,7 +36,7 @@ public interface CategoryService {
      *
      * @param categoryDTO 新增的分类数据
      */
-    void add(CategoryDTO categoryDTO);
+    void insert(CategoryDTO categoryDTO);
 
     /**
      * 删除分类
