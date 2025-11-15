@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -81,5 +82,24 @@ public class CategoryServiceImpl implements CategoryService {
         category.setCreateUser(BaseContext.getCurrentId());
         category.setUpdateUser(BaseContext.getCurrentId());
         categoryMapper.add(category);
+    }
+
+    /**
+     * 删除分类
+     *
+     * @param id 分类id
+     */
+    public void delete(Long id) {
+        categoryMapper.delete(id);
+    }
+
+    /**
+     * 根据类型查询分类列表
+     *
+     * @param type 分类类型
+     * @return 分类列表
+     */
+    public List<Category> list(Integer type) {
+        return categoryMapper.list(type);
     }
 }

@@ -2,12 +2,15 @@ package com.sky.controller.admin;
 
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
+import com.sky.entity.Category;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 分类管理
@@ -66,5 +69,29 @@ public class CategoryController {
     public Result<String> add(@RequestBody CategoryDTO categoryDTO) {
         categoryService.add(categoryDTO);
         return Result.success();
+    }
+
+    /**
+     * 删除分类
+     *
+     * @param id 分类id
+     * @return 删除结果
+     */
+    @DeleteMapping
+    public Result<String> delete(Long id) {
+        categoryService.delete(id);
+        return Result.success();
+    }
+
+    /**
+     * 查询分类列表
+     *
+     * @param type 分类类型
+     * @return 分类列表
+     */
+    @GetMapping("/list")
+    public Result<List<Category>> list(Integer type){
+        List<Category> list = categoryService.list(type);
+        return Result.success(list);
     }
 }
