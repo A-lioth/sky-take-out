@@ -22,11 +22,11 @@ public class CategoryController {
     /**
      * 修改分类
      *
-     * @param categoryDTO
-     * @return
+     * @param categoryDTO 分类信息
+     * @return 修改结果
      */
     @PutMapping
-    public Result update(@RequestBody CategoryDTO categoryDTO) {
+    public Result<String> update(@RequestBody CategoryDTO categoryDTO) {
         categoryService.update(categoryDTO);
         return Result.success();
     }
@@ -34,12 +34,37 @@ public class CategoryController {
     /**
      * 分页查询
      *
-     * @param categoryPageQueryDTO
-     * @return
+     * @param categoryPageQueryDTO 分页查询参数
+     * @return 查询结果
      */
     @GetMapping("/page")
     public Result<PageResult> pageQuery(CategoryPageQueryDTO categoryPageQueryDTO) {
         PageResult pageResult = categoryService.pageQuery(categoryPageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * 启用禁用分类
+     *
+     * @param status 状态
+     * @param id 分类id
+     * @return 启用禁用结果
+     */
+    @PostMapping("/status/{status}")
+    public Result<String> updateStatus(@PathVariable Integer status, Long id) {
+        categoryService.updateStatus(status, id);
+        return Result.success();
+    }
+
+    /**
+     * 新增分类
+     *
+     * @param categoryDTO 分类信息
+     * @return 新增结果
+     */
+    @PostMapping
+    public Result<String> add(@RequestBody CategoryDTO categoryDTO) {
+        categoryService.add(categoryDTO);
+        return Result.success();
     }
 }

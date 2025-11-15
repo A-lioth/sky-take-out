@@ -99,8 +99,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     /**
      * 启用禁用员工账号
      *
-     * @param status
-     * @param id
+     * @param status 员工状态
+     * @param id 员工id
      */
     public void startOrStop(Integer status, Long id) {
         Employee employee = Employee.builder().status(status).id(id).build();
@@ -110,7 +110,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     /**
      * 根据id查询员工信息
      *
-     * @param id
+     * @param id 员工id
      * @return
      */
     public Employee getById(Long id) {
