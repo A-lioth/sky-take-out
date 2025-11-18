@@ -2,11 +2,18 @@ package com.sky.controller.admin;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
+import com.sky.entity.DishFlavor;
+import com.sky.mapper.DishMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 菜品管理
@@ -16,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 public class DishController {
     @Autowired
     private DishService dishService;
+    @Autowired
+    private DishMapper dishMapper;
 
     /**
      * 新增菜品
@@ -50,6 +59,38 @@ public class DishController {
     @DeleteMapping
     public Result<String> delete(Long[] ids) {
         dishService.delete(ids);
+        return Result.success();
+    }
+
+    /**
+     * 根据id查询菜品及其口味信息
+     *
+     * @param id 菜品id
+     * @return 菜品及其口味信息
+     */
+    @GetMapping("/{id}")
+    public Result<DishVO> getById(@PathVariable Long id) {
+        // * 根据id查询菜品数据
+        Dish dish = dishMapper.getById(id);
+        // * 根据菜品id查询口味数据
+        List<DishFlavor> flavors = dishMapper.getFlavorsByDishId(id);
+        // * 封装返回结果
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish, dishVO);
+        dishVO.setFlavors(flavors);
+
+        return Result.success(dishVO);
+    }
+
+    /**
+     * 修改菜品
+     *
+     * @param dishDTO 菜品数据
+     * @return 修改结果
+     */
+    @PutMapping
+    public Result<String> update(@RequestBody DishDTO dishDTO) {
+        dishService.updateWithFlavor(dishDTO);
         return Result.success();
     }
 }
