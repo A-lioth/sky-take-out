@@ -93,4 +93,29 @@ public class DishController {
         dishService.updateWithFlavor(dishDTO);
         return Result.success();
     }
+
+    /**
+     * 修改菜品状态
+     *
+     * @param status 状态
+     * @param id 菜品id
+     * @return 修改结果
+     */
+    @PostMapping("/status/{status}")
+    public Result<String> updateStatus(@PathVariable Integer status, Long id) {
+        dishService.updateStatus(status, id);
+        return Result.success();
+    }
+
+    /**
+     * 根据分类id查询菜品
+     *
+     * @param categoryId 分类id
+     * @return 菜品
+     */
+    @GetMapping
+    public Result<List<Dish>> getByCategoryId(Long categoryId) {
+        List<Dish> list = dishService.list(categoryId);
+        return Result.success(list);
+    }
 }
