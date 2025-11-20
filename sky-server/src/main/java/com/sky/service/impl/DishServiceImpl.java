@@ -51,7 +51,7 @@ public class DishServiceImpl implements DishService {
         Long dishId = dish.getId();
 
         List<DishFlavor> flavors = dishDTO.getFlavors();
-        if (flavors != null && flavors.size() > 0) {
+        if (flavors != null && !flavors.isEmpty()) {
             // * 为每个口味数据设置菜品id
             flavors.forEach(dishFlavor -> dishFlavor.setDishId(dishId));
             dishFlavorMapper.insertBatch(flavors);
@@ -80,7 +80,7 @@ public class DishServiceImpl implements DishService {
         // * 当前菜品是否在售
         for (Long id : ids) {
             Dish dish = dishMapper.getById(id);
-            if (dish.getStatus() == StatusConstant.ENABLE) {
+            if (dish.getStatus().equals(StatusConstant.ENABLE)) {
                 throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
             }
         }

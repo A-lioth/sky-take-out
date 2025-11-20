@@ -113,7 +113,7 @@ public class DishController {
      * @param categoryId 分类id
      * @return 菜品
      */
-    @GetMapping
+    @GetMapping("/list")
     public Result<List<Dish>> getByCategoryId(Long categoryId) {
         List<Dish> list = dishService.list(categoryId);
         return Result.success(list);
