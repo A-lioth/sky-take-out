@@ -43,7 +43,7 @@ sky:
     admin-token-name: token
     user-secret-key: itheima
     user-ttl: 31536000000
-    user-token-name: authorization
+    user-token-name: authentication
   wechat:
     appid: ${sky.wechat.appid}
     secret: ${sky.wechat.secret}
