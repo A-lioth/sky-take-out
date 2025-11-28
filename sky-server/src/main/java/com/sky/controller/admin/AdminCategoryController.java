@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/category")
 @Slf4j
-public class CategoryController {
+public class AdminCategoryController {
     @Autowired
     private CategoryService categoryService;
 
