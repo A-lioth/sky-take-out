@@ -22,7 +22,7 @@ public class UserCategoryController {
      * @param type 分类类型
      * @return 分类列表
      */
-    @GetMapping("list")
+    @GetMapping("/list")
     public Result<List<Category>> list(Integer type) {
         List<Category> categoryList = categoryService.list(type);
         return Result.success(categoryList);

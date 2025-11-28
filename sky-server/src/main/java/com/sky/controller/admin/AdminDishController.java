@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/dish")
-public class DishController {
+public class AdminDishController {
     @Autowired
     private DishService dishService;
     @Autowired
@@ -98,7 +98,7 @@ public class DishController {
      * 修改菜品状态
      *
      * @param status 状态
-     * @param id 菜品id
+     * @param id     菜品id
      * @return 修改结果
      */
     @PostMapping("/status/{status}")
@@ -114,8 +114,7 @@ public class DishController {
      * @return 菜品
      */
     @GetMapping("/list")
-    public Result<List<Dish>> getByCategoryId(Long categoryId) {
-        List<Dish> list = dishService.list(categoryId);
-        return Result.success(list);
+    public Result<List<DishVO>> getByCategoryId(Long categoryId) {
+        return Result.success();
     }
 }

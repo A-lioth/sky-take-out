@@ -84,6 +84,7 @@ public interface DishMapper {
 
     /**
      * 根据分类id查询菜品
+     *
      * @param dish 菜品
      * @return 菜品列表
      */
@@ -91,9 +92,19 @@ public interface DishMapper {
 
     /**
      * 根据套餐id查询菜品
+     *
      * @param id 套餐id
      * @return 菜品列表
      */
     @Select("select a.* from dish a left join setmeal_dish b on a.id = b.dish_id where b.setmeal_id = #{setmealId}")
     List<Dish> getBySetmealId(Long id);
+
+    /**
+     * 根据分类id查询菜品
+     *
+     * @param categoryId 分类id
+     * @return 菜品列表
+     */
+    @Select("select * from dish where category_id = #{categoryId}")
+    List<Dish> listByCategoryId(Long categoryId);
 }
