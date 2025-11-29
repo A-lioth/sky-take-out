@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/setmeal")
-public class SetmealController {
+public class AdminSetmealController {
     @Autowired
     private SetmealService setmealService;
 
