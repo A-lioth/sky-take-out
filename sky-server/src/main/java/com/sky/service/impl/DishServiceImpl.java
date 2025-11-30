@@ -204,4 +204,24 @@ public class DishServiceImpl implements DishService {
         });
         return dishVOList;
     }
+
+    /**
+     * 根据id查询菜品
+     *
+     * @param id 菜品id
+     * @return 菜品
+     */
+    public Dish getById(Long id) {
+        return dishMapper.getById(id);
+    }
+
+    /**
+     * 根据菜品id查询对应的口味
+     *
+     * @param dishId 菜品id
+     * @return 菜品口味
+     */
+    public List<DishFlavor> getFlavorsByDishId(Long dishId) {
+        return dishMapper.getFlavorsByDishId(dishId);
+    }
 }

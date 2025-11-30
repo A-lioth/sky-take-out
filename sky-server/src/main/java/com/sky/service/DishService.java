@@ -3,6 +3,7 @@ package com.sky.service;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
+import com.sky.entity.DishFlavor;
 import com.sky.result.PageResult;
 import com.sky.vo.DishVO;
 
@@ -50,12 +51,13 @@ public interface DishService {
      * 修改菜品状态
      *
      * @param status 状态
-     * @param id 菜品id
+     * @param id     菜品id
      */
     void updateStatus(Integer status, Long id);
 
     /**
      * 根据分类id查询菜品
+     *
      * @param categoryId 分类id
      * @return 菜品列表
      */
@@ -63,6 +65,7 @@ public interface DishService {
 
     /**
      * 根据分类id查询菜品
+     *
      * @param categoryId 分类id
      * @return 菜品列表
      */
@@ -70,8 +73,25 @@ public interface DishService {
 
     /**
      * 批量查询菜品和对应的口味
+     *
      * @param dishList 菜品列表
      * @return 菜品VO列表
      */
     List<DishVO> listWithFlavor(List<Dish> dishList);
+
+    /**
+     * 根据id查询菜品
+     *
+     * @param id 菜品id
+     * @return 菜品
+     */
+    Dish getById(Long id);
+
+    /**
+     * 根据菜品id查询对应的口味
+     *
+     * @param dishId 菜品id
+     * @return 菜品口味
+     */
+    List<DishFlavor> getFlavorsByDishId(Long dishId);
 }
