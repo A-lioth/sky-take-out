@@ -7,6 +7,7 @@ import com.sky.result.Result;
 import com.sky.service.SetmealService;
 import com.sky.vo.SetmealVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -45,6 +46,7 @@ public class AdminSetmealController {
      * @param setmealDTO 套餐数据
      * @return 添加结果
      */
+    @CacheEvict(cacheNames = "setmealCache", key = "#setmealDTO.categoryId")
     @PostMapping
     public Result<String> insert(@RequestBody SetmealDTO setmealDTO) {
         setmealService.insertWithDish(setmealDTO);
@@ -57,6 +59,7 @@ public class AdminSetmealController {
      * @param setmealDTO 套餐数据
      * @return 修改结果
      */
+    @CacheEvict(cacheNames = "setmealCache", allEntries = true)
     @PutMapping
     public Result<String> update(@RequestBody SetmealDTO setmealDTO) {
         setmealService.update(setmealDTO);
@@ -69,12 +72,21 @@ public class AdminSetmealController {
      * @param ids 套餐id数组
      * @return 删除结果
      */
+    @CacheEvict(cacheNames = "setmealCache", allEntries = true)
     @DeleteMapping
     public Result<String> delete(Long[] ids) {
         setmealService.deleteBatch(ids);
         return Result.success();
     }
 
+    /**
+     * 修改套餐状态
+     *
+     * @param status 状态
+     * @param id     套餐id
+     * @return 修改结果
+     */
+    @CacheEvict(cacheNames = "setmealCache", allEntries = true)
     @PostMapping("/status/{status}")
     public Result<String> updateStatus(@PathVariable Integer status, Long id) {
         setmealService.updateStatus(status, id);
