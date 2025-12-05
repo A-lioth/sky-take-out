@@ -6,6 +6,7 @@ import com.sky.mapper.AddressBookMapper;
 import com.sky.service.AddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,5 +33,21 @@ public class AddressBookServiceImpl implements AddressBookService {
      */
     public List<AddressBook> list(AddressBook addressBook) {
         return addressBookMapper.list(addressBook);
+    }
+
+    /**
+     * 设置默认地址
+     *
+     * @param addressBook 默认地址
+     */
+    @Transactional
+    public void setDefault(AddressBook addressBook) {
+        // * 设置该用户的所有地址非默认
+        addressBook.setIsDefault(0);
+        addressBook.setUserId(BaseContext.getCurrentId());
+        addressBookMapper.setNotDefault(addressBook);
+        // * 设置新的默认地址
+        addressBook.setIsDefault(1);
+        addressBookMapper.updateDefaultById(addressBook);
     }
 }

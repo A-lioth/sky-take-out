@@ -38,4 +38,30 @@ public class AddressBookController {
         return Result.success();
     }
 
+    /**
+     * 设置默认地址
+     *
+     * @param addressBook 设置默认的参数
+     * @return 设置成功结果
+     */
+    @PutMapping("/default")
+    public Result<String> setDefault(@RequestBody AddressBook addressBook) {
+        addressBookService.setDefault(addressBook);
+        return Result.success();
+    }
+
+    /**
+     * 查询默认地址
+     *
+     * @return 默认地址
+     */
+    @GetMapping("/default")
+    public Result<AddressBook> getDefault() {
+        AddressBook addressBook = AddressBook.builder().userId(BaseContext.getCurrentId()).isDefault(1).build();
+        List<AddressBook> list = addressBookService.list(addressBook);
+        if (list != null && list.size() == 1) {
+            return Result.success(list.get(0));
+        }
+        return Result.error("没有查询到默认地址");
+    }
 }
