@@ -14,6 +14,7 @@ import java.util.List;
 public class AddressBookServiceImpl implements AddressBookService {
     @Autowired
     private AddressBookMapper addressBookMapper;
+
     /**
      * 新增地址
      *
@@ -49,5 +50,33 @@ public class AddressBookServiceImpl implements AddressBookService {
         // * 设置新的默认地址
         addressBook.setIsDefault(1);
         addressBookMapper.updateDefaultById(addressBook);
+    }
+
+    /**
+     * 删除地址
+     *
+     * @param id 要删除的地址id
+     */
+    public void deleteById(Long id) {
+        addressBookMapper.deleteById(id);
+    }
+
+    /**
+     * 修改地址
+     *
+     * @param addressBook 修改的参数
+     */
+    public void updateById(AddressBook addressBook) {
+        addressBookMapper.updateById(addressBook);
+    }
+
+    /**
+     * 根据id查询地址
+     *
+     * @param id 要查询的id
+     * @return 地址
+     */
+    public AddressBook getById(Long id) {
+        return addressBookMapper.getById(id);
     }
 }
