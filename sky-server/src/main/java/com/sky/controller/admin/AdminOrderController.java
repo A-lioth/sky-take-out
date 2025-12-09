@@ -4,6 +4,7 @@ import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,5 +39,15 @@ public class AdminOrderController {
     @GetMapping("/details/{id}")
     public Result<OrderVO> detail(@PathVariable Long id) {
         return Result.success(orderService.detail(id));
+    }
+
+    /**
+     * 订单状态统计
+     *
+     * @return 订单状态统计结果
+     */
+    @GetMapping("/statistics")
+    public Result<OrderStatisticsVO> statistics() {
+        return Result.success(orderService.statistics());
     }
 }
