@@ -5,11 +5,10 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
+import com.sky.exception.OrderBusinessException;
 import com.sky.mapper.*;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
@@ -196,6 +195,94 @@ public class OrderServiceImpl implements OrderService {
         orderStatisticsVO.setConfirmed(orderMapper.countStatus(Orders.CONFIRMED));
         orderStatisticsVO.setDeliveryInProgress(orderMapper.countStatus(Orders.DELIVERY_IN_PROGRESS));
         return orderStatisticsVO;
+    }
+
+    /**
+     * 确认订单
+     *
+     * @param ordersConfirmDTO 订单确认参数
+     */
+    public void confirm(OrdersConfirmDTO ordersConfirmDTO) {
+        orderMapper.update(Orders.builder().id(ordersConfirmDTO.getId()).status(Orders.CONFIRMED).build());
+    }
+
+    /**
+     * 拒单
+     *
+     * @param ordersRejectionDTO 拒单参数
+     */
+    public void reject(OrdersRejectionDTO ordersRejectionDTO) {
+        // * 查询订单
+        Orders orders = orderMapper.getById(ordersRejectionDTO.getId());
+        // * 订单存在且状态为待接单才可拒单
+        if (orders == null || !orders.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        // * 根据id更新订单状态、拒单原因、取消时间
+        orderMapper.update(Orders.builder()
+                .id(orders.getId())
+                .status(Orders.CANCELLED)
+                .rejectionReason(ordersRejectionDTO.getRejectionReason())
+                .cancelTime(LocalDateTime.now())
+                .build());
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param ordersCancelDTO 取消订单参数
+     */
+    public void cancel(OrdersCancelDTO ordersCancelDTO) {
+        // * 根据id查询订单
+        Orders orders = orderMapper.getById(ordersCancelDTO.getId());
+        // * 订单存在且状态为待接单才可取消
+        if (orders == null || !orders.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        // * 根据id更新订单状态、取消原因、取消时间
+        orderMapper.update(Orders.builder()
+                .id(orders.getId())
+                .status(Orders.CANCELLED)
+                .cancelReason(ordersCancelDTO.getCancelReason())
+                .cancelTime(LocalDateTime.now())
+                .build());
+    }
+
+    /**
+     * 派送订单
+     *
+     * @param id 订单id
+     */
+    public void delivery(Long id) {
+        // * 根据id查询订单
+        Orders orders = orderMapper.getById(id);
+        // * 订单存在且状态为待接单才可派送
+        if (orders == null || !orders.getStatus().equals(Orders.CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        orderMapper.update(Orders.builder()
+                .id(orders.getId())
+                .status(Orders.DELIVERY_IN_PROGRESS)
+                .build());
+    }
+
+    /**
+     * 完成订单
+     *
+     * @param id 订单id
+     */
+    public void complete(Long id) {
+        // * 根据id查询订单
+        Orders orders = orderMapper.getById(id);
+        // * 订单存在且状态为派送中才可完成
+        if (orders != null && !orders.getStatus().equals(Orders.DELIVERY_IN_PROGRESS)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        orderMapper.update(Orders.builder()
+                .id(orders.getId())
+                .status(Orders.COMPLETED)
+                .deliveryTime(LocalDateTime.now())
+                .build());
     }
 
     /**
