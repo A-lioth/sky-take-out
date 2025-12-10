@@ -80,4 +80,19 @@ public interface OrderService {
      * @param id 订单id
      */
     void complete(Long id);
+
+    /**
+     * 订单列表
+     * @param page 页码
+     * @param pageSize 页大小
+     * @param status 订单状态
+     * @return 订单列表
+     */
+    PageResult pageQuery(int page, Integer pageSize, Integer status);
+
+    /**
+     * 再来一单
+     * @param id 订单id
+     */
+    void repetition(Long id);
 }

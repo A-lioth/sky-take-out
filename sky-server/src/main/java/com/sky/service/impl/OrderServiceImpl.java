@@ -286,6 +286,59 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
+     * 订单列表
+     *
+     * @param pageNum  页码
+     * @param pageSize 页大小
+     * @param status   订单状态
+     * @return 订单列表
+     */
+    public PageResult pageQuery(int pageNum, Integer pageSize, Integer status) {
+        PageHelper.startPage(pageNum, pageSize);
+
+        OrdersPageQueryDTO ordersPageQueryDTO = new OrdersPageQueryDTO();
+        ordersPageQueryDTO.setUserId(BaseContext.getCurrentId());
+        ordersPageQueryDTO.setStatus(status);
+
+        // * 分页查询
+        Page<Orders> page = orderMapper.pageQuery(ordersPageQueryDTO);
+        List<OrderVO> orderVOList = new ArrayList<>();
+        // * 查询订单详细信息
+        if (!page.getResult().isEmpty()) {
+            page.forEach(orders -> {
+                Long orderId = orders.getId();
+                List<OrderDetail> orderDetailList = orderDetailMapper.listByOrderId(orderId);
+                OrderVO orderVO = new OrderVO();
+                BeanUtils.copyProperties(orders, orderVO);
+                orderVO.setOrderDetailList(orderDetailList);
+                orderVOList.add(orderVO);
+            });
+        }
+        return new PageResult(page.getTotal(), orderVOList);
+    }
+
+    /**
+     * 再来一单
+     *
+     * @param id 订单id
+     */
+    public void repetition(Long id) {
+        // * 查询用户id
+        Long userId = BaseContext.getCurrentId();
+        // * 查询订单信息
+        List<OrderDetail> orderDetailList = orderDetailMapper.listByOrderId(id);
+        // * 将订单详情数据转为购物车数据
+        List<ShoppingCart> shoppingCartList = orderDetailList.stream().map(orderDetail -> {
+            ShoppingCart shoppingCart = new ShoppingCart();
+            BeanUtils.copyProperties(orderDetail, shoppingCart, "id");
+            shoppingCart.setUserId(userId);
+            shoppingCart.setCreateTime(LocalDateTime.now());
+            return shoppingCart;
+        }).collect(Collectors.toList());
+        shoppingCartMapper.insertBatch(shoppingCartList);
+    }
+
+    /**
      * 订单详情
      *
      * @param page 订单分页查询结果
