@@ -1,6 +1,5 @@
 package com.sky.controller.user;
 
-import com.sky.dto.OrdersCancelDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
@@ -68,14 +67,15 @@ public class UserOrderController {
     }
 
     /**
-     * 取消订单
+     * 用户取消订单
      *
-     * @param ordersCancelDTO 取消订单信息
-     * @return 订单取消结果
+     * @param id 订单id
+     * @return 取消结果
+     * @throws Exception 订单取消异常
      */
-    @PutMapping("/cancel")
-    public Result<String> cancel(@RequestBody OrdersCancelDTO ordersCancelDTO) {
-        orderService.cancel(ordersCancelDTO);
+    @PutMapping("/cancel/{id}")
+    public Result<String> cancel(@PathVariable Long id) throws Exception {
+        orderService.userCancelById(id);
         return Result.success();
     }
 
