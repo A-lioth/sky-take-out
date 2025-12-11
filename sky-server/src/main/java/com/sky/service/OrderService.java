@@ -27,12 +27,14 @@ public interface OrderService {
 
     /**
      * 支付成功，修改订单状态
+     *
      * @param outTradeNo 微信支付返回的订单号
      */
     void paySuccess(String outTradeNo);
 
     /**
      * 订单查询
+     *
      * @param ordersPageQueryDTO 订单查询条件
      * @return 订单列表结果
      */
@@ -40,6 +42,7 @@ public interface OrderService {
 
     /**
      * 订单详情
+     *
      * @param orderId 订单id
      * @return 订单详情
      */
@@ -47,58 +50,74 @@ public interface OrderService {
 
     /**
      * 订单状态统计
+     *
      * @return 订单状态统计结果
      */
     OrderStatisticsVO statistics();
 
     /**
      * 确认订单
-      * @param ordersConfirmDTO 确认订单参数
+     *
+     * @param ordersConfirmDTO 确认订单参数
      */
     void confirm(OrdersConfirmDTO ordersConfirmDTO);
 
     /**
      * 拒单
+     *
      * @param ordersRejectionDTO 拒单参数
      */
     void reject(OrdersRejectionDTO ordersRejectionDTO);
 
     /**
      * 取消订单
+     *
      * @param ordersCancelDTO 取消订单参数
      */
     void cancel(OrdersCancelDTO ordersCancelDTO);
 
     /**
      * 派送订单
+     *
      * @param id 订单id
      */
     void delivery(Long id);
 
     /**
      * 完成订单
+     *
      * @param id 订单id
      */
     void complete(Long id);
 
     /**
      * 订单列表
-     * @param page 页码
+     *
+     * @param page     页码
      * @param pageSize 页大小
-     * @param status 订单状态
+     * @param status   订单状态
      * @return 订单列表
      */
     PageResult pageQuery(int page, Integer pageSize, Integer status);
 
     /**
      * 再来一单
+     *
      * @param id 订单id
      */
     void repetition(Long id);
 
     /**
      * 用户取消订单
+     *
      * @param id 订单id
      */
     void userCancelById(Long id) throws Exception;
+
+    /**
+     * 订单催单
+     *
+     * @param id 订单id
+     */
+    void reminder(Long id);
 }
