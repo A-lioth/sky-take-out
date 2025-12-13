@@ -251,8 +251,12 @@ public class OrderServiceImpl implements OrderService {
     public void cancel(OrdersCancelDTO ordersCancelDTO) {
         // * 根据id查询订单
         Orders orders = orderMapper.getById(ordersCancelDTO.getId());
-        // * 订单存在且状态为待接单才可取消
-        if (orders == null || !orders.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+        // * 订单存在
+        if (orders == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        // * 订单存在且状态为非已完成才可取消
+        if (orders.getStatus().equals(Orders.COMPLETED)) {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
         // * 根据id更新订单状态、取消原因、取消时间

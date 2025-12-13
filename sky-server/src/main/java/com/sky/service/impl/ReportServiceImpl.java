@@ -2,8 +2,10 @@ package com.sky.service.impl;
 
 import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
+import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.TurnoverReportVO;
+import com.sky.vo.UserReportVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ import java.util.Map;
 public class ReportServiceImpl implements ReportService {
     @Autowired
     private OrderMapper orderMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 统计给定时间区间营业额数据
@@ -29,9 +33,9 @@ public class ReportServiceImpl implements ReportService {
      * @return 营业额数据
      */
     public TurnoverReportVO getTurnoverStatistics(LocalDate begin, LocalDate end) {
-        // * 创建包含begin到end之间所有日期的列表
+        // * 创建包含begin到end之间所有日期的List
         List<LocalDate> dateList = new ArrayList<>();
-        dateList.add( begin);
+        dateList.add(begin);
         while (!begin.isAfter(end)) {
             begin = begin.plusDays(1);
             dateList.add(begin);
@@ -51,6 +55,41 @@ public class ReportServiceImpl implements ReportService {
         return TurnoverReportVO.builder()
                 .dateList(StringUtils.join(dateList, ","))
                 .turnoverList(StringUtils.join(turnoverList, ","))
+                .build();
+    }
+
+    /**
+     * 统计用户数据
+     *
+     * @param begin 时间区间开始时间
+     * @param end   时间区间结束时间
+     * @return 用户数据
+     */
+    public UserReportVO getUserStatistics(LocalDate begin, LocalDate end) {
+        // * 创建包含begin到end之间所有日期的List
+        List<LocalDate> dateList = new ArrayList<>();
+        dateList.add(begin);
+        while (!begin.isAfter(end)) {
+            begin = begin.plusDays(1);
+            dateList.add(begin);
+        }
+        // * 创建包含每天用户的总数量的List
+        List<Integer> totalUserList = new ArrayList<>();
+        // * 创建包含每天新增用户的数量的List
+        List<Integer> newUserList = new ArrayList<>();
+        dateList.forEach(date -> {
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
+            Map map = new HashMap();
+            map.put("end", endTime);
+            totalUserList.add(userMapper.countByMap(map));
+            map.put("begin", beginTime);
+            newUserList.add(userMapper.countByMap(map));
+        });
+        return UserReportVO.builder()
+                .dateList(StringUtils.join(dateList, ","))
+                .totalUserList(StringUtils.join(totalUserList, ","))
+                .newUserList(StringUtils.join(newUserList, ","))
                 .build();
     }
 }
