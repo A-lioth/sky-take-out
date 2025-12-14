@@ -43,7 +43,7 @@
                 and s.status = #{status}
             </if>
         </where>
-        order by s.create_time desc
+        order by s.update_time desc
     </select>
     <select id="listSetmealByCategoryId" resultType="com.sky.entity.Setmeal">
         select * from setmeal

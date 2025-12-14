@@ -21,13 +21,13 @@
             <if test="name != null">and name like '%${name}%'</if>
             <if test="type != null">and type = #{type}</if>
         </where>
-        order by sort, create_time desc
+        order by update_time desc, sort desc
     </select>
 
     <select id="list" resultType="com.sky.entity.Category">
         select * from category
         where status = 1
         <if test="type != null">and type = #{type}</if>
-        order by sort, create_time desc
+        order by update_time desc, sort desc
     </select>
 </mapper>
