@@ -10,12 +10,14 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface SetmealMapper {
 
     /**
      * 根据分类id查询套餐的数量
+     *
      * @param id 分类id
      * @return 套餐数量
      */
@@ -24,6 +26,7 @@ public interface SetmealMapper {
 
     /**
      * 修改套餐信息
+     *
      * @param setmeal 套餐信息
      */
     @Autofill(value = OperationType.UPDATE)
@@ -31,6 +34,7 @@ public interface SetmealMapper {
 
     /**
      * 套餐分页查询
+     *
      * @param setmealPageQueryDTO 分页查询参数
      * @return 套餐分页数据
      */
@@ -38,6 +42,7 @@ public interface SetmealMapper {
 
     /**
      * 新增套餐
+     *
      * @param setmeal 套餐信息
      */
     @Autofill(value = OperationType.INSERT)
@@ -45,6 +50,7 @@ public interface SetmealMapper {
 
     /**
      * 根据id查询套餐数据
+     *
      * @param id 套餐id
      * @return 套餐数据
      */
@@ -53,14 +59,24 @@ public interface SetmealMapper {
 
     /**
      * 批量删除套餐
+     *
      * @param ids 套餐id数组
      */
     void deleteBatch(Long[] ids);
 
     /**
      * 根据分类id查询套餐
+     *
      * @param setmeal 套餐信息
      * @return 套餐数据
      */
     List<Setmeal> listSetmealByCategoryId(Setmeal setmeal);
+
+    /**
+     * 根据条件统计套餐数量
+     *
+     * @param map 查询条件
+     * @return 套餐数量
+     */
+    Integer countByMap(Map map);
 }
